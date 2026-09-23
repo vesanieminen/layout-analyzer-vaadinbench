@@ -147,8 +147,12 @@ jobs:
       # local override committed by accident would otherwise pass every check on
       # the pull request and fail once it was already on main.
       - name: Every task builds on the two published images
+        # Consumers and forks use Vaadin's published images. Forks publishing
+        # their own stack can explicitly select its namespace with this variable.
+        env:
+          IMAGE_OWNER: ${{ vars.VAADINBENCH_IMAGE_OWNER || 'vaadin' }}
         run: |
-          owner=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          owner=$(echo "$IMAGE_OWNER" | tr '[:upper:]' '[:lower:]')
           bash .github/scripts/base-image-reference.sh \
             "ghcr.io/$owner/vaadinbench-base" "ghcr.io/$owner/vaadinbench-agents"
 

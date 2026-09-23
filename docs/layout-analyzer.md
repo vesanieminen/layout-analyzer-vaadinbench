@@ -106,3 +106,8 @@ the employee-list reference solution, and captures through real Copilot offline.
 It also verifies that disabling Copilot makes the adapter fail explicitly. The
 regular validation job checks staging isolation and resolves generated commands
 through pinned Harbor.
+
+Fork CI validates the published `ghcr.io/vaadin` images by default. A fork that
+publishes its own stack should set the repository Actions variable
+`VAADINBENCH_IMAGE_OWNER` to that publisher's namespace; the digest and consistent
+stack checks still apply.
