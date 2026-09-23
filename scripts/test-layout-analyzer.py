@@ -27,6 +27,12 @@ class LayoutExperimentTests(unittest.TestCase):
             (captures / 'capture.json').write_text(json.dumps({
                 'status': 'error', 'totalDurationMs': 2000, 'error': 'Copilot timeout',
             }))
+            partial = captures.parent / 'partial'
+            partial.mkdir()
+            (partial / 'capture.json').write_text(json.dumps({
+                'status': 'ok', 'totalDurationMs': 1000,
+                'coverageWarnings': ['Visible panel missing from Copilot tree'],
+            }))
             result = trial / 'result.json'
             result.write_text(json.dumps({
                 'task_name': 'flow-reports-strict',
@@ -40,10 +46,11 @@ class LayoutExperimentTests(unittest.TestCase):
             row = summary.summarize(result)
             self.assertIsNone(row['reward'])
             self.assertEqual(row['error'], 'AgentTimeoutError')
-            self.assertEqual(row['successfulCaptures'], 0)
-            self.assertEqual(row['captures'], 1)
+            self.assertEqual(row['successfulCaptures'], 1)
+            self.assertEqual(row['captures'], 2)
+            self.assertEqual(row['partialCaptures'], 1)
             self.assertEqual(row['captureErrors'], ['Copilot timeout'])
-            self.assertEqual(row['captureTotalMs'], 2000)
+            self.assertEqual(row['captureTotalMs'], 3000)
             self.assertEqual(row['agentSeconds'], 15)
             self.assertEqual(row['inputTokensIncludingCache'], 100)
 

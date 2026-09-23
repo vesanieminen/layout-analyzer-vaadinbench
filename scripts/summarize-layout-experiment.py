@@ -39,6 +39,7 @@ def summarize(path):
         'cachedTokens': tokens.get('n_cache_tokens'), 'outputTokens': tokens.get('n_output_tokens'),
         'captures': len(captures),
         'successfulCaptures': sum(c.get('status') == 'ok' for c in captures),
+        'partialCaptures': sum(bool(c.get('coverageWarnings')) for c in captures),
         'captureTotalMs': sum(c.get('totalDurationMs', 0) for c in captures),
         'reportChars': sum(c.get('reportChars', 0) for c in captures),
         'captureErrors': [c.get('error') for c in captures if c.get('status') != 'ok'],

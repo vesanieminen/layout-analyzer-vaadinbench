@@ -26,7 +26,11 @@ a fresh browser context; it does not reuse playwright-cli's session.
 
 The report covers only the current viewport and rendered state. Hidden panels
 and virtualized rows are not fully inspected. Check `coverage` and truncation;
-source references may be unavailable, so use component paths. Copilot Inspect
+source references may be unavailable, so use component paths. A successful,
+stable capture can still omit visible virtual children (including the employee
+detail panel on the pinned Copilot). A warning is printed and recorded in
+`capture.json` when your readiness subtree is absent from Copilot's tree. This
+check is conservative; it does not prove every child is measured. Copilot Inspect
 mode is restored before the screenshot. Heuristic findings and matching peer
 structures do not establish design intent. Screenshots and the task's checks
 remain necessary. Do not change dependencies or the target design to silence

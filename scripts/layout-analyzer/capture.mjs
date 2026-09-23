@@ -75,6 +75,17 @@ export async function main(args = process.argv.slice(2)) {
     metadata.copilotAvailable = true;
     metadata.finalUrl = page.url();
     metadata.coverage = report.coverage;
+    // Flow virtual children (notably MasterDetailLayout's dynamic detail) can
+    // be visible in the DOM yet absent from Copilot's tree on older runtimes.
+    // Stability alone does not detect that. This is a conservative check of
+    // the caller's readiness subtree, not a claim of exhaustive DOM coverage.
+    metadata.readyElementInTree = await page.locator(values.ready).first().evaluate(element =>
+      window.Vaadin.copilot.tree.allNodesFlat.some(node =>
+        node.element?.isConnected && (node.element === element || element.contains(node.element))));
+    metadata.coverageWarnings = metadata.readyElementInTree ? [] : [
+      'Partial coverage: the readiness element/subtree is absent from Copilot’s component tree. Visible dynamic panels or virtual children may be missing. Use the screenshot and browser tools to inspect this state.',
+    ];
+    for (const warning of metadata.coverageWarnings) process.stderr.write(`WARNING: ${warning}\n`);
     metadata.reportChars = report.markdown.length;
     metadata.analyzerVersion = report.analyzerVersion;
     metadata.captureDurationMs = report.durationMs;

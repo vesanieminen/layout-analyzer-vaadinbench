@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import { chromium } from 'playwright';
 import { captureLayout } from '@vaadin/layout-analyzer-preview/playwright';
+import { main as captureWithAdapter } from './capture.mjs';
 
 const config = JSON.parse(await readFile(process.env.PLAYWRIGHT_MCP_CONFIG, 'utf8')).browser;
 const browser = await chromium.launch({ ...config.launchOptions, headless: true });
@@ -46,7 +47,23 @@ try {
   const after = await captureLayout(page);
   assert.notDeepEqual(before.model.boxes, after.model.boxes);
   assert.ok(after.model.findings.some(f => /OVERFLOW|ESCAPES|CUT|CLIPPED|SIDEWAYS/.test(f.kind)));
-  await writeFile(`${out}/summary.json`, JSON.stringify({ results, truncation: true, restorationAfterError: true, recapture: true }, null, 2));
+  // The adapter must prepare a real interactive state in its fresh context.
+  const prepare = `${out}/open-detail.mjs`;
+  await writeFile(prepare, `export async function prepare(page) {
+    await page.getByTestId('employee-grid').locator('[part~="body-row"]').nth(1).click();
+    await page.getByTestId('employee-detail').waitFor();
+  }`);
+  await captureWithAdapter([process.argv[2] || 'http://localhost:8080/employees',
+    '--prepare', prepare, '--state', 'detail-open',
+    '--ready', '[data-testid="employee-detail"]', '--out', `${out}/detail`]);
+  const detail = JSON.parse(await readFile(`${out}/detail/capture.json`, 'utf8'));
+  assert.equal(detail.status, 'ok');
+  assert.equal(detail.state, 'detail-open');
+  // Copilot 25.2.5 omits this visible virtual child. Do not mistake stable
+  // geometry for complete coverage; keep the omission visible to the agent.
+  assert.equal(detail.readyElementInTree, false);
+  assert.equal(detail.coverageWarnings.length, 1);
+  await writeFile(`${out}/summary.json`, JSON.stringify({ results, truncation: true, restorationAfterError: true, recapture: true, preparedState: true }, null, 2));
   console.log(JSON.stringify(results, null, 2));
 } finally {
   await browser.close();

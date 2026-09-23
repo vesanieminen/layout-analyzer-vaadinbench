@@ -104,6 +104,25 @@ smoke exercises geometry-only/full reports, truncation, restoration after an
 error and recapture after introducing horizontal overflow. It is a compatibility
 test against a reference solution, separate from held-out agent trials.
 
+The [recorded reference captures](layout-analyzer-smoke-results.json) also cover
+Orders, Payroll and Reports at 1440×1024 and 720×900, in both report modes:
+
+| View | Visible components, desktop/mobile | Full report characters, desktop/mobile | Relationships |
+| --- | ---: | ---: | --- |
+| Employee list | 33 / 16 | 4,758 / 3,037 | none |
+| Orders | 52 / 35 | 6,101 / 5,296 | none |
+| Payroll | 42 / 25 | 5,618 / 4,267 | none |
+| Reports | 58 / 41 | 6,941 / 5,424 | one consistent summary-metric inset; no exceptions |
+
+All 16 captures had stable geometry, ready fonts and zero source references.
+The extra views' cold captures took 13–22 seconds end to end on a shared host;
+employee recaptures reused one page and should not be compared to those cold
+starts. The reference designs still generated 3–7 findings each. Reports'
+relationship concerns its three summary metrics, not its repeated cards.
+A separate prepared-state capture filtered Reports to Sweden and correctly
+captured the two remaining cards. These observations support using geometry for
+targeted debugging; they do not establish a development-time or quality gain.
+
 Source-line lookup is unavailable on this Copilot version. Hidden states and
 virtualized Grid contents are incomplete, and stable geometry does not prove
 asynchronous work is complete. Intentional whitespace, ellipsis and scrolling
@@ -111,6 +130,15 @@ can trigger findings. Relationship matching is structural, with physical-edge
 assumptions, not semantic design knowledge. Copilot also attempts background
 release-note downloads on the restricted network; these can add noise and cost,
 which is why all three comparison arms enable it.
+
+The prepared employee drawer exposed an additional compatibility issue:
+Copilot 25.2.5 omits the visible dynamic `MasterDetailLayout` detail subtree.
+The report still marks geometry stable and measures 33 components, while the
+screenshot shows the fields. The adapter now checks whether the readiness
+element or any of its descendants appears in Copilot's tree; if absent, it
+prints a partial-coverage warning and records it in `capture.json`. This check
+does not prove coverage of all descendants when the readiness root is present.
+The full screenshot and ordinary tools remain essential for dynamic panels.
 
 The `layout-analyzer` CI workflow builds the actual experiment image, applies
 the employee-list reference solution, and captures through real Copilot offline.
