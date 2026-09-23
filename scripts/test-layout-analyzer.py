@@ -1,5 +1,6 @@
 """Check experiment isolation and resolve the generated run with pinned Harbor."""
 import hashlib
+import importlib.util
 import json
 from pathlib import Path
 import shlex
@@ -11,6 +12,41 @@ from layout_analyzer import ROOT, SUPPORTED, stage_tasks
 
 
 class LayoutExperimentTests(unittest.TestCase):
+    def test_summary_preserves_missing_reward_and_capture_failures(self):
+        spec = importlib.util.spec_from_file_location('summary', ROOT / 'scripts/summarize-layout-experiment.py')
+        summary = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(summary)
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            task = root / 'snapshot/tasks/flow-reports-strict'
+            task.mkdir(parents=True)
+            (task.parent.parent / 'manifest.json').write_text('{"mode":"full"}')
+            trial = root / 'jobs/experiment/trial'
+            captures = trial / 'agent/layout/one'
+            captures.mkdir(parents=True)
+            (captures / 'capture.json').write_text(json.dumps({
+                'status': 'error', 'totalDurationMs': 2000, 'error': 'Copilot timeout',
+            }))
+            result = trial / 'result.json'
+            result.write_text(json.dumps({
+                'task_name': 'flow-reports-strict',
+                'config': {'task': {'path': str(task)},
+                           'agent': {'kwargs': {'reasoning_effort': 'xhigh'}}},
+                'agent_execution': {'started_at': '2026-09-23T10:00:00',
+                                    'finished_at': '2026-09-23T10:00:15'},
+                'agent_result': {'n_input_tokens': 100, 'n_cache_tokens': 60},
+                'exception_info': {'exception_type': 'AgentTimeoutError'},
+            }))
+            row = summary.summarize(result)
+            self.assertIsNone(row['reward'])
+            self.assertEqual(row['error'], 'AgentTimeoutError')
+            self.assertEqual(row['successfulCaptures'], 0)
+            self.assertEqual(row['captures'], 1)
+            self.assertEqual(row['captureErrors'], ['Copilot timeout'])
+            self.assertEqual(row['captureTotalMs'], 2000)
+            self.assertEqual(row['agentSeconds'], 15)
+            self.assertEqual(row['inputTokensIncludingCache'], 100)
+
     def test_isolation_and_cache_invalidation(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -58,7 +94,7 @@ class LayoutExperimentTests(unittest.TestCase):
             output = subprocess.check_output([
                 'uv', 'run', 'vaadin-bench.py', '-c', 'vanilla', '-m', 'luna',
                 '-t', 'flow-employee-list-strict', '-k', '1', '--layout-analyzer', mode,
-                '--dry-run', '--', '--ak', 'reasoning_effort=xhigh',
+                '--dry-run', '--', '--ak', 'reasoning_effort=xhigh', '-n', '9',
             ], cwd=ROOT, text=True)
             command = next(line for line in output.splitlines() if line.startswith('env '))
             config = json.loads(subprocess.check_output(

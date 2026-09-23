@@ -13,6 +13,10 @@ on:
       - '.github/workflows/layout-analyzer.yml'
   workflow_dispatch:
 
+concurrency:
+  group: layout-analyzer-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   smoke:
     name: Real Copilot layout capture

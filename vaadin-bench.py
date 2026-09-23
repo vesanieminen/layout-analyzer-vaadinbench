@@ -670,7 +670,7 @@ def main(argv: list[str]) -> int:
     for task in tasks:
         common += ["-i", task]
     common += ["-k", str(args.attempts)]
-    if args.concurrent is not None:
+    if args.concurrent is not None and not args.layout_analyzer:
         common += ["-n", str(args.concurrent)]
     if args.timeout_multiplier is not None:
         common += ["--timeout-multiplier", str(args.timeout_multiplier)]
@@ -723,6 +723,9 @@ def main(argv: list[str]) -> int:
             condition, agent, models, common,
             f"{prefix}{condition.name}-{agent.label}-{stamp}", args.passthrough,
         )
+        if args.layout_analyzer:
+            # Last CLI value wins, including over a passthrough -n or config.
+            cmd += ["-n", str(args.concurrent)]
         if args.dry_run:
             print("env PYTHONPATH=" + shlex.quote(env["PYTHONPATH"]) + " " + shlex.join(cmd))
             continue

@@ -83,6 +83,17 @@ actually follow the report and whether they damage intended designs. Count
 capture time and extra context as costs. One attempt per arm is a smoke trial;
 it cannot establish a causal improvement or a stable success rate.
 
+Export trial-level outcomes, token usage, capture costs and the verifier's design
+checks without averaging unlike tasks:
+
+```sh
+uv run python scripts/summarize-layout-experiment.py jobs > layout-results.json
+```
+
+Keep the staged manifests when moving results; the exporter uses their recorded
+mode, not a guessed label. Missing rewards and token counts stay null, and capture
+failures remain visible alongside successful captures.
+
 ## Compatibility and limitations
 
 The package README only claims testing on Vaadin/Copilot 25.3.0-beta3. The initial
