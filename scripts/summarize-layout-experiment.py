@@ -40,6 +40,8 @@ def summarize(path):
         'captures': len(captures),
         'successfulCaptures': sum(c.get('status') == 'ok' for c in captures),
         'partialCaptures': sum(bool(c.get('coverageWarnings')) for c in captures),
+        'capturesWithoutCoverageCheck': sum(c.get('status') == 'ok' and 'readyElementInTree' not in c
+                                           for c in captures),
         'captureTotalMs': sum(c.get('totalDurationMs', 0) for c in captures),
         'reportChars': sum(c.get('reportChars', 0) for c in captures),
         'captureErrors': [c.get('error') for c in captures if c.get('status') != 'ok'],

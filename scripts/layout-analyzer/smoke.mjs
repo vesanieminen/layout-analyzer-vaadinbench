@@ -46,7 +46,10 @@ try {
   await page.getByTestId('employee-grid').evaluate(el => el.style.width = '2000px');
   const after = await captureLayout(page);
   assert.notDeepEqual(before.model.boxes, after.model.boxes);
-  assert.ok(after.model.findings.some(f => /OVERFLOW|ESCAPES|CUT|CLIPPED|SIDEWAYS/.test(f.kind)));
+  const priorFindings = new Set(before.model.findings.map(f => JSON.stringify([f.kind, f.box, f.detail])));
+  assert.ok(after.model.findings.some(f => /OVERFLOW|ESCAPES|CUT|CLIPPED|SIDEWAYS/.test(f.kind)
+    && !priorFindings.has(JSON.stringify([f.kind, f.box, f.detail]))),
+  'The injected overflow must produce a new finding, not merely retain a pre-existing warning');
   // The adapter must prepare a real interactive state in its fresh context.
   const prepare = `${out}/open-detail.mjs`;
   await writeFile(prepare, `export async function prepare(page) {
