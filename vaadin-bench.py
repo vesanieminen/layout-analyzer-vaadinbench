@@ -32,6 +32,8 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 
+from scripts.layout_analyzer import MODES as LAYOUT_MODES, SUPPORTED as LAYOUT_TASKS, stage_tasks
+
 ROOT = Path(__file__).resolve().parent
 CONDITIONS_DIR = ROOT / "conditions"
 TASKS_DIR = ROOT / "tasks"
@@ -545,6 +547,8 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         help="JSON object merged over the model entry, for fields with no flag",
     )
     run = parser.add_argument_group("run")
+    run.add_argument("--layout-analyzer", choices=LAYOUT_MODES,
+                     help="opt-in visual-task experiment: Copilot only, geometry, or full reports")
     run.add_argument("-k", "--attempts", "--iterations", type=int, default=DEFAULT_ATTEMPTS, metavar="N", help=f"attempts per trial (default: {DEFAULT_ATTEMPTS})")
     run.add_argument("-n", "--concurrent", type=int, metavar="N", help="concurrent trials (Harbor's default: 4)")
     run.add_argument("--timeout-multiplier", type=float, metavar="F", help="scale every task timeout")
@@ -597,6 +601,11 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         parser.error("--default runs everything; drop it to select conditions, models or tasks")
     if args.attempts < 1:
         parser.error(f"--attempts wants a positive integer, got {args.attempts}")
+    if args.layout_analyzer:
+        if args.concurrent is None:
+            args.concurrent = 1
+        if not 1 <= args.concurrent <= 3:
+            parser.error("layout experiments require --concurrent between 1 and 3")
     return args
 
 
@@ -629,7 +638,7 @@ def main(argv: list[str]) -> int:
     if args.condition:
         names = select("condition", split_patterns(args.condition), [c.name for c in conditions])
         conditions = [c for c in conditions if c.name in names]
-    tasks = all_tasks()
+    tasks = list(LAYOUT_TASKS) if args.layout_analyzer else all_tasks()
     if args.task:
         tasks = select("task", split_patterns(args.task), tasks)
     model_patterns = split_patterns(args.model)
@@ -637,7 +646,8 @@ def main(argv: list[str]) -> int:
         every_model = [m for a in agents for m in a.models]
         select("model", model_patterns, every_model, substring=True)
 
-    common = ["-p", "tasks"]
+    task_path = stage_tasks(tasks, args.layout_analyzer) if args.layout_analyzer else Path("tasks")
+    common = ["-p", str(task_path)]
     # Each trial's copied agent-tools CLI builds and OpenCode state are pruned
     # by Harbor's own plugin as that trial ends (scripts/prune-job-binaries.sh
     # says what and why). Stood down when a passthrough --pk brings kwargs: Harbor
@@ -684,6 +694,8 @@ def main(argv: list[str]) -> int:
 
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
     prefix = f"{args.job_name}-" if args.job_name else ""
+    if args.layout_analyzer:
+        prefix += f"layout-{args.layout_analyzer}-"
     plan: list[tuple[Condition, Agent, list[str]]] = []
     for condition in conditions:
         runs_before = len(plan)

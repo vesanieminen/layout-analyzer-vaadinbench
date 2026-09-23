@@ -1,0 +1,56 @@
+name: layout-analyzer
+
+on:
+  pull_request:
+    paths:
+      - 'vaadin-layout-analyzer-preview-*.tgz'
+      - 'vaadin-bench.py'
+      - 'scripts/layout-analyzer/**'
+      - 'scripts/layout_analyzer.py'
+      - 'scripts/test-layout-analyzer.py'
+      - 'tasks/flow-employee-list-strict/**'
+      - 'uv.lock'
+      - '.github/workflows/layout-analyzer.yml'
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    name: Real Copilot layout capture
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - name: Stage and build the employee-list experiment
+        run: |
+          task=$(PYTHONPATH=scripts uv run python - <<'PY'
+          from layout_analyzer import stage_tasks
+          print(stage_tasks(['flow-employee-list-strict'], 'full') / 'flow-employee-list-strict')
+          PY
+          )
+          docker build -t layout-analyzer-smoke "$task/environment"
+      - name: Exercise the preview against real Vaadin, offline
+        run: |
+          mkdir -p layout-smoke
+          docker run --rm --network none --cpus 2 --memory 4g \
+            -v "$PWD/tasks/flow-employee-list-strict/solution:/reference:ro" \
+            -v "$PWD/layout-smoke:/logs/agent" \
+            layout-analyzer-smoke bash -lc '
+              set -euo pipefail
+              bash /reference/solve.sh
+              app-start
+              node /opt/vaadinbench/layout-analyzer/smoke.mjs
+              layout-check http://localhost:8080/employees --ready vaadin-grid --out /logs/agent/adapter
+              app-stop
+              JAVA_TOOL_OPTIONS=-Dvaadin.copilot.enable=false app-start
+              if layout-check http://localhost:8080/employees --ready vaadin-grid --timeout 2000 --out /logs/agent/disabled; then
+                echo "Capture unexpectedly succeeded without Copilot" >&2
+                exit 1
+              fi
+              node -e '\''const r=require("/logs/agent/disabled/capture.json"); if(r.status!=="error" || r.copilotAvailable!==false) process.exit(1)'\''
+            '
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: layout-analyzer-smoke
+          path: layout-smoke

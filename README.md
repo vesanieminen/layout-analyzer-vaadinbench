@@ -204,6 +204,12 @@ a reward — the verifier image never sets it, and `base/verify-lib.sh` unsets
 The browser verifiers switch the same thing off for themselves, as a
 `@SpringBootTest` property or a system property on their embedded server.
 
+The opt-in [layout analyzer experiment](docs/layout-analyzer.md) enables Copilot
+in isolated copies of the eight visual tasks. Use `--layout-analyzer control`,
+`geometry`, or `full` to compare ordinary tools with rendered-layout reports.
+Start with one task; the experiment defaults to one concurrent trial and permits
+at most three. Its verifier and normal benchmark runs keep their existing setup.
+
 `agent.patch` is the graded project against the project the agent started from,
 with `agent-diff-stat.txt` beside it as a summary and `agent-diff-baseline.txt`
 naming the tree it was cut against. The verifier writes it; nothing about the
