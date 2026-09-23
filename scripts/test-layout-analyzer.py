@@ -34,6 +34,13 @@ class LayoutExperimentTests(unittest.TestCase):
                 'coverageWarnings': ['Visible panel missing from Copilot tree'],
             }))
             result = trial / 'result.json'
+            verifier = trial / 'verifier'
+            verifier.mkdir()
+            (verifier / 'TEST-browser.xml').write_text('''<testsuite>
+                <testcase name="filter" time="2"/>
+                <testcase name="visual" time="3"><failure/></testcase>
+                <testcase name="unavailable"><skipped/></testcase>
+            </testsuite>''')
             result.write_text(json.dumps({
                 'task_name': 'flow-reports-strict',
                 'config': {'task': {'path': str(task)},
@@ -53,6 +60,8 @@ class LayoutExperimentTests(unittest.TestCase):
             self.assertEqual(row['captureTotalMs'], 3000)
             self.assertEqual(row['agentSeconds'], 15)
             self.assertEqual(row['inputTokensIncludingCache'], 100)
+            self.assertEqual([test['status'] for test in row['browserTests']],
+                             ['passed', 'failure', 'skipped'])
 
     def test_isolation_and_cache_invalidation(self):
         with tempfile.TemporaryDirectory() as tmp:

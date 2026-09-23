@@ -88,8 +88,8 @@ actually follow the report and whether they damage intended designs. Count
 capture time and extra context as costs. One attempt per arm is a smoke trial;
 it cannot establish a causal improvement or a stable success rate.
 
-Export trial-level outcomes, token usage, capture costs and the verifier's design
-checks without averaging unlike tasks:
+Export trial-level outcomes, token usage, capture costs, individual browser-test
+outcomes and the verifier's design checks without averaging unlike tasks:
 
 ```sh
 uv run python scripts/summarize-layout-experiment.py jobs > layout-results.json
@@ -98,6 +98,24 @@ uv run python scripts/summarize-layout-experiment.py jobs > layout-results.json
 Keep the staged manifests when moving results; the exporter uses their recorded
 mode, not a guessed label. Missing rewards and token counts stay null, and capture
 failures remain visible alongside successful captures.
+
+## Agent trials
+
+[Per-trial measurements](layout-analyzer-agent-results.json) record Luna/xhigh
+runs, including failures and missing analyzer usage. These are single attempts
+on a shared host. Copilot was enabled in every arm.
+
+The first employee-list strict trial used full reports with an appended command
+guide. The agent never invoked the analyzer and reached the one-hour limit.
+Its final reward was 0: all 431 measured geometry/style assertions passed, but
+14 of 16 screenshot regions failed, selection returned the wrong employee, and
+the closed Grid overflowed at 900 px. This is evidence of an adoption problem,
+not an analyzer quality result. It also shows why measured geometry alone cannot
+replace interaction, breakpoint and screenshot checks.
+
+The next runs prepend a first-render reminder and retain detailed commands after
+the task. The snapshots record this protocol change; comparisons must account
+for it. Further outcomes will be recorded after grading completes.
 
 ## Compatibility and limitations
 

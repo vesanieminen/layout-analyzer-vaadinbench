@@ -4,10 +4,22 @@ import argparse
 from datetime import datetime
 import json
 from pathlib import Path
+from xml.etree import ElementTree
 
 
 def read(path):
     return json.loads(path.read_text()) if path.is_file() else {}
+
+
+def browser_tests(directory):
+    tests = []
+    for path in sorted(directory.glob('TEST-*.xml')):
+        for case in ElementTree.parse(path).iter('testcase'):
+            status = next((name for name in ('error', 'failure', 'skipped')
+                           if case.find(name) is not None), 'passed')
+            tests.append({'class': case.get('classname'), 'name': case.get('name'),
+                          'status': status, 'seconds': float(case.get('time', 0))})
+    return tests
 
 
 def summarize(path):
@@ -45,6 +57,7 @@ def summarize(path):
         'captureTotalMs': sum(c.get('totalDurationMs', 0) for c in captures),
         'reportChars': sum(c.get('reportChars', 0) for c in captures),
         'captureErrors': [c.get('error') for c in captures if c.get('status') != 'ok'],
+        'browserTests': browser_tests(path.parent / 'verifier'),
         'designChecks': design.get('design'), 'visualChecks': design.get('visual'),
         'designFailures': design.get('failures'),
     }
