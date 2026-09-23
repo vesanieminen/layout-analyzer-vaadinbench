@@ -86,7 +86,7 @@ class LayoutExperimentTests(unittest.TestCase):
             (task / 'instruction.md').write_text('A changed task.\n')
             changed = stage_tasks([name], 'full', root)
             self.assertNotEqual(staged, changed)
-            self.assertTrue((staged / name / 'instruction.md').read_text().startswith('Implement'))
+            self.assertIn('Implement the view.\n', (staged / name / 'instruction.md').read_text())
             control = stage_tasks([name], 'control', root) / name
             self.assertEqual((control / 'instruction.md').read_text(), 'A changed task.\n')
             self.assertFalse((control / 'environment/layout-analyzer').exists())

@@ -45,6 +45,11 @@ The supported tasks are the employee-list, payroll, orders and reports pairs.
 The project-generation, migration, basic new-view and filtering tasks have
 different toolchains or goals and are not silently included in this experiment.
 
+Report arms put a short first-render reminder before the task and the detailed
+command guide after it. The intended loop is implement → render → capture →
+check the design and fix relevant issues. Offering a report only after completing
+the view can miss the part of development where geometry feedback is useful.
+
 ## Use the report during implementation
 
 ```sh

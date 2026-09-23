@@ -90,8 +90,14 @@ def stage_tasks(tasks, mode, root=ROOT):
                         f"ENV VB_LAYOUT_MODE={mode}\n"
                     )
             if mode != "control":
-                with (task / "instruction.md").open("a") as instruction:
-                    instruction.write("\n\n" + (TOOLS / "instructions.md").read_text())
+                instruction = task / "instruction.md"
+                instruction.write_text(
+                    "Layout experiment: run `layout-check` after the first working render, "
+                    "before manual geometry tuning. Capture the task's desktop and mobile "
+                    "states, then use the report alongside screenshots and `ui-check`. "
+                    "The command guide follows the task below.\n\n"
+                    + instruction.read_text() + "\n\n" + (TOOLS / "instructions.md").read_text()
+                )
         (staging / "manifest.json").write_text(encoded)
         destination.parent.mkdir(parents=True, exist_ok=True)
         try:

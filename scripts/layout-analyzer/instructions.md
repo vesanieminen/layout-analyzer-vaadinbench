@@ -1,7 +1,7 @@
 ### Rendered layout feedback (preview experiment)
 
-Copilot is enabled in this development environment. After implementing the view,
-use `layout-check` alongside your normal screenshots and `ui-check` to inspect
+Copilot is enabled in this development environment. Once the view first renders,
+run `layout-check` before manual geometry tuning, alongside screenshots and `ui-check`, to inspect
 geometry, clipping, spacing, and repeated structures. Fix only observations that
 conflict with the requested design. A warning count is not a quality score.
 
