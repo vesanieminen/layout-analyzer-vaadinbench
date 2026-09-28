@@ -543,6 +543,8 @@ The migration task retains its separate older-version stack. Platform upgrades
 require rebuilding both modern images: changing a POM alone does not populate
 the offline Maven cache. PR controls build the changed stack; publication on
 `main` updates the committed image digests after the upgrade is merged.
+The grid-filtering task uses Karibu Testing 2.7.3 for compatibility with Vaadin
+25.3's service event bus; 2.7.2 fails during browserless test setup.
 
 The base image (`base/Dockerfile`) supplies Java, Maven dependencies and Chromium. The
 migration stack uses `base/migration.Dockerfile` and additionally carries Node.js

@@ -125,6 +125,12 @@ the recorded agent trials are historical 25.2 results; upgrading the runtime is
 a separate change from adding the analyzer. Future comparisons must use the same
 runtime in both arms. The upgrade retains Lumo and the existing design references.
 
+The employee reference smoke also passes on Vaadin / Flow / Copilot 25.3.0:
+desktop/mobile captures, truncation, restoration after errors, new overflow
+detection, prepared state and explicit failure with Copilot disabled. The reports
+still contain 33/16 visible components and zero source references; the visible
+detail subtree remains absent, so the partial-coverage warning is still needed.
+
 The package README only claims testing on Vaadin/Copilot 25.3.0-beta3. The initial
 local employee-list reference smoke also succeeded on this benchmark's Vaadin
 25.2.6 / Copilot 25.2.5 with Lumo. Desktop and mobile reports had stable geometry
