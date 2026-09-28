@@ -79,6 +79,8 @@ jobs:
             '
       - uses: actions/upload-artifact@v4
         if: always()
+        continue-on-error: true # Capture assertions above remain required.
         with:
           name: layout-analyzer-smoke
           path: layout-smoke
+          retention-days: 3

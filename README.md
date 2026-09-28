@@ -618,6 +618,9 @@ Publication reuses both images of an unchanged stack, preserving its pinned
 digests and task-image caches. Shared agent CLI changes rebuild both agent
 images without repeating either base warm-up. Controls prepare only the stacks
 of the selected tasks and reuse published images when their inputs match.
+Each control runner builds changed images locally using the shared layer cache;
+Docker images are not transferred through Actions artifacts. Diagnostic uploads
+are best effort if artifact storage is full; grading failures still fail CI.
 The migration base stores one Maven cache, accessible to both root and the
 unprivileged submitted-build user; the build image does not duplicate it.
 
