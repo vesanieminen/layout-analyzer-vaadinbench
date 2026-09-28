@@ -9,6 +9,9 @@ on:
       - 'scripts/layout_analyzer.py'
       - 'scripts/test-layout-analyzer.py'
       - 'tasks/flow-employee-list-strict/**'
+      - 'tasks/*/tests/protected/**'
+      - 'base/**'
+      - '.github/scripts/*image*.sh'
       - 'uv.lock'
       - '.github/workflows/layout-analyzer.yml'
   workflow_dispatch:
@@ -21,10 +24,31 @@ jobs:
   smoke:
     name: Real Copilot layout capture
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: astral-sh/setup-uv@v5
+      - name: Prepare the current modern stack
+        run: |
+          set -euo pipefail
+          source .github/scripts/task-images.sh
+          base_ref=$(task_image_reference modern tests)
+          revision=$(bash .github/scripts/base-image-revision.sh "$base_ref")
+          decision=$(bash .github/scripts/base-image-decision.sh "${{ github.event_name }}" "$revision" modern)
+          agents_ref=$(task_image_reference modern environment)
+          revision=$(bash .github/scripts/base-image-revision.sh "$agents_ref")
+          agents=$(bash .github/scripts/agents-image-decision.sh "${{ github.event_name }}" "$revision" modern "$decision")
+          if [ "$decision" = rebuild ]; then
+            base_ref=vaadinbench-base:layout-ci
+            docker build -t "$base_ref" -f base/Dockerfile .
+          fi
+          if [ "$agents" = rebuild ]; then
+            agents_ref=vaadinbench-agents:layout-ci
+            docker build -t "$agents_ref" --build-arg BASE_IMAGE="$base_ref" -f base/agents.Dockerfile .
+          fi
+          pin_task_images "$base_ref" "$agents_ref" "" ""
       - name: Stage and build the employee-list experiment
         run: |
           task=$(PYTHONPATH=scripts uv run python - <<'PY'

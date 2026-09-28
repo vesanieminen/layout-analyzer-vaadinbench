@@ -131,6 +131,7 @@ jobs:
     timeout-minutes: 120
     strategy:
       fail-fast: false
+      max-parallel: 3
       matrix: ${{ fromJSON(inputs.matrix) }}
     env:
       SELECTED_TASKS: ${{ matrix.tasks }}

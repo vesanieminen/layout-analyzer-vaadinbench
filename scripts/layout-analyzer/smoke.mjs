@@ -62,11 +62,11 @@ try {
   const detail = JSON.parse(await readFile(`${out}/detail/capture.json`, 'utf8'));
   assert.equal(detail.status, 'ok');
   assert.equal(detail.state, 'detail-open');
-  // Copilot 25.2.5 omits this visible virtual child. Do not mistake stable
-  // geometry for complete coverage; keep the omission visible to the agent.
-  assert.equal(detail.readyElementInTree, false);
-  assert.equal(detail.coverageWarnings.length, 1);
-  await writeFile(`${out}/summary.json`, JSON.stringify({ results, truncation: true, restorationAfterError: true, recapture: true, preparedState: true }, null, 2));
+  // Copilot 25.2.5 omitted this visible virtual child. A newer runtime may
+  // include it; either way, missing coverage must remain visible to the agent.
+  assert.equal(typeof detail.readyElementInTree, 'boolean');
+  assert.equal(detail.coverageWarnings.length, detail.readyElementInTree ? 0 : 1);
+  await writeFile(`${out}/summary.json`, JSON.stringify({ results, truncation: true, restorationAfterError: true, recapture: true, preparedState: true, detailReadyElementInTree: detail.readyElementInTree }, null, 2));
   console.log(JSON.stringify(results, null, 2));
 } finally {
   await browser.close();
