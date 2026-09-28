@@ -307,6 +307,13 @@ jobs:
               fi
               # 1. The verifier builds with the generated pom plus exactly the
               #    declared additions, so its one difference stays reviewable.
+              # Check the recording seal here as well as during the image build,
+              # so a refreshed skeleton cannot leave stale content hashes behind.
+              if [ -f "$task/tests/check-recording.py" ] && \
+                 ! python3 "$task/tests/check-recording.py" "$generated" "$task/tests/expected-files.txt"; then
+                status=1
+                continue
+              fi
               rm -rf /tmp/generated && mkdir -p /tmp/generated
               cp "$generated/pom.xml" /tmp/generated/pom.xml
               additions="$task/tests/pom-additions.patch"
