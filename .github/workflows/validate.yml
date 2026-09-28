@@ -146,9 +146,9 @@ jobs:
       # where they are published, because publication happens after a merge: a
       # local override committed by accident would otherwise pass every check on
       # the pull request and fail once it was already on main.
+      # Forks consume the upstream images until they publish and pin their own.
+      # Set the repository variable VAADINBENCH_IMAGE_OWNER for that case.
       - name: Every task builds on the two published images
-        # Consumers and forks use Vaadin's published images. Forks publishing
-        # their own stack can explicitly select its namespace with this variable.
         env:
           IMAGE_OWNER: ${{ vars.VAADINBENCH_IMAGE_OWNER || 'vaadin' }}
         run: |
@@ -305,15 +305,17 @@ jobs:
                 status=1
                 continue
               fi
-              # 1. The verifier builds with the generated pom plus exactly the
-              #    declared additions, so its one difference stays reviewable.
-              # Check the recording seal here as well as during the image build,
-              # so a refreshed skeleton cannot leave stale content hashes behind.
+              # Catch stale recording hashes before the verifier image build.
+              # The same check remains in the Dockerfile for direct Harbor runs.
               if [ -f "$task/tests/check-recording.py" ] && \
-                 ! python3 "$task/tests/check-recording.py" "$generated" "$task/tests/expected-files.txt"; then
+                 ! python3 "$task/tests/check-recording.py" "$generated" \
+                     "$task/tests/expected-files.txt"; then
+                echo "::error::$name: regenerate expected-files.txt after refreshing the recording"
                 status=1
                 continue
               fi
+              # 1. The verifier builds with the generated pom plus exactly the
+              #    declared additions, so its one difference stays reviewable.
               rm -rf /tmp/generated && mkdir -p /tmp/generated
               cp "$generated/pom.xml" /tmp/generated/pom.xml
               additions="$task/tests/pom-additions.patch"
