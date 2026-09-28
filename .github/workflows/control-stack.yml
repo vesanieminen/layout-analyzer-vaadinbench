@@ -31,6 +31,13 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Free space for offline toolchains
+        run: |
+          # These hosted-runner SDKs are unused: all Java/browser work runs in Docker.
+          df -h /
+          sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc /usr/share/swift
+          df -h /
+
       # The Docker driver shares local tags and layers with Harbor/Compose.
       # containerd enables external cache export without a separate builder daemon.
       - uses: docker/setup-docker-action@v5
@@ -105,6 +112,13 @@ jobs:
           provenance: false
           cache-from: type=gha,scope=controls-${{ inputs.stack }}-agents
           cache-to: type=gha,scope=controls-${{ inputs.stack }}-agents,mode=max,ignore-error=true
+
+      - name: Release intermediate build cache before grading
+        run: |
+          # Cache export has finished. Keep tagged runtime images, but discard
+          # warm-up stages so Harbor has room to build and run task containers.
+          docker builder prune --all --force
+          df -h /
 
       # Each task Dockerfile names a published image by digest, and Harbor builds
       # a task's images itself with no build args — so pointing those files at the
