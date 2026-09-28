@@ -64,7 +64,10 @@ RUN curl -fsSL https://downloads.claude.ai/claude-code-releases/bootstrap.sh \
 #       codex --version
 # Keep GPT-6 Astra, Sol, and Luna support in the container, not just on the host.
 ARG CODEX_VERSION=0.156.1
-RUN curl -fsSL https://chatgpt.com/codex/install.sh -o /tmp/codex-install.sh \
+# The bootstrap endpoint can return transient 404s from hosted runners.
+RUN curl -fsSL --retry 5 --retry-all-errors --retry-delay 2 \
+        --connect-timeout 20 --max-time 120 \
+        https://chatgpt.com/codex/install.sh -o /tmp/codex-install.sh \
     && CODEX_NON_INTERACTIVE=1 sh /tmp/codex-install.sh --release "$CODEX_VERSION" \
     && rm -f /tmp/codex-install.sh \
     && codex_bin="$(readlink -f "$(command -v codex)")" \
