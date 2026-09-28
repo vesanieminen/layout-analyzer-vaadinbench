@@ -113,11 +113,17 @@ the closed Grid overflowed at 900 px. This is evidence of an adoption problem,
 not an analyzer quality result. It also shows why measured geometry alone cannot
 replace interaction, breakpoint and screenshot checks.
 
-The next runs prepend a first-render reminder and retain detailed commands after
-the task. The snapshots record this protocol change; comparisons must account
-for it. Further outcomes will be recorded after grading completes.
+Subsequent runs prepended a first-render reminder and retained detailed commands
+after the task. The experiment was stopped before a completed comparison was
+available. The snapshots record this protocol change; these trials do not
+establish a development benefit.
 
 ## Compatibility and limitations
+
+The modern benchmark stack now targets Vaadin 25.3.0. The measurements below and
+the recorded agent trials are historical 25.2 results; upgrading the runtime is
+a separate change from adding the analyzer. Future comparisons must use the same
+runtime in both arms. The upgrade retains Lumo and the existing design references.
 
 The package README only claims testing on Vaadin/Copilot 25.3.0-beta3. The initial
 local employee-list reference smoke also succeeded on this benchmark's Vaadin

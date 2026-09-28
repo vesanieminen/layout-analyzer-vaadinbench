@@ -537,8 +537,14 @@ uv run harbor run -p tasks/<task-id> -a oracle
 uv run harbor run -p tasks/<task-id> -a nop
 ```
 
-Two shared images, both pinned by digest in the task Dockerfiles. The base
-image (`base/Dockerfile`) supplies Java, Maven dependencies and Chromium. The
+Two shared images, both pinned by digest in the task Dockerfiles. The modern
+stack targets Vaadin **25.3.0** on JDK 25 (`base/stack-version.txt`).
+The migration task retains its separate older-version stack. Platform upgrades
+require rebuilding both modern images: changing a POM alone does not populate
+the offline Maven cache. PR controls build the changed stack; publication on
+`main` updates the committed image digests after the upgrade is merged.
+
+The base image (`base/Dockerfile`) supplies Java, Maven dependencies and Chromium. The
 migration stack uses `base/migration.Dockerfile` and additionally carries Node.js
 and its resolved `node_modules`. Each verifier builds on its own stack. The agents image (`base/agents.Dockerfile`) adds the
 agent CLIs on top of the base, and every task environment builds on it.
