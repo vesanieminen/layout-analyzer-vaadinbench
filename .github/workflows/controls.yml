@@ -132,8 +132,8 @@ jobs:
             echo "$stack=$selected" >> "$GITHUB_OUTPUT"
           done
 
-  # Separate reusable-workflow calls let each stack start grading immediately
-  # after its own preparation, without waiting for the other stack.
+  # Each stack caps its matrix at three. Run the stacks sequentially so a full
+  # sweep also stays within three concurrent Harbor trials overall.
   modern:
     name: Modern
     needs: select
@@ -145,8 +145,8 @@ jobs:
 
   migration:
     name: Migration
-    needs: select
-    if: needs.select.outputs.migration != '{"include":[]}'
+    needs: [select, modern]
+    if: ${{ !cancelled() && needs.select.result == 'success' && needs.select.outputs.migration != '{"include":[]}' }}
     uses: ./.github/workflows/control-stack.yml
     with:
       stack: migration
