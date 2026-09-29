@@ -8,6 +8,7 @@ import com.microsoft.playwright.options.*;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.List;
+import java.util.function.Supplier;
 
 /** Capture environment and readiness shared by development and grading. */
 final class BrowserSession {
@@ -25,13 +26,35 @@ final class BrowserSession {
   }
 
   static Browser launch(Playwright playwright) {
-    return playwright
+    return launch(() -> playwright
         .chromium()
         .launch(
             new BrowserType.LaunchOptions()
                 .setArgs(
                     List.of(
-                        "--no-sandbox", "--disable-dev-shm-usage", "--font-render-hinting=none")));
+                        "--no-sandbox", "--disable-dev-shm-usage", "--font-render-hinting=none"))));
+  }
+
+  /** Retry only a SIGSEGV while starting Chromium, before any page or check exists. */
+  static Browser launch(Supplier<Browser> start) {
+    try {
+      return start.get();
+    } catch (PlaywrightException first) {
+      String message = first.getMessage();
+      if (message == null || !message.contains("<launching>")
+          || !message.contains("<launched>") || !message.contains("Received signal 11")) {
+        throw first;
+      }
+      System.err.println("Chromium crashed with SIGSEGV during launch; retrying once before checks");
+      // Keep the original browser log visible even if the fresh process succeeds.
+      System.err.println(first.getMessage());
+      try {
+        return start.get();
+      } catch (RuntimeException second) {
+        second.addSuppressed(first);
+        throw second;
+      }
+    }
   }
 
   static BrowserContext context(Browser browser) {
