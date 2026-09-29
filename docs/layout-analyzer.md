@@ -15,12 +15,12 @@ export CODEX_FORCE_AUTH_JSON=1
 
 # Start with one task. Each arm runs with Copilot enabled.
 for mode in control geometry full; do
-  uv run vaadin-bench.py -c vanilla -m luna -t flow-employee-list-strict \
+  uv run vaadin-bench.py -c vanilla -m openai/gpt-6-luna -t flow-employee-list-strict \
     -k 1 -n 1 --layout-analyzer "$mode" -- --ak reasoning_effort=xhigh
 done
 
 # Once the pilot works, cover all eight visual tasks (strict and lenient).
-uv run vaadin-bench.py -c vanilla -m luna -k 1 -n 2 \
+uv run vaadin-bench.py -c vanilla -m openai/gpt-6-luna -k 1 -n 2 \
   --layout-analyzer full -- --ak reasoning_effort=xhigh
 ```
 
@@ -29,8 +29,8 @@ uv run vaadin-bench.py -c vanilla -m luna -k 1 -n 2 \
 relationships. They all keep the same ordinary browser tools, task requirements,
 grader and resource limits. Normal runs without the flag keep Copilot disabled.
 The experiment defaults to one concurrent trial and accepts at most three.
-Account for other Harbor processes when selecting concurrency. Luna resolves to
-the model pinned by this repository's model table, currently GPT-5.6 Luna.
+Account for other Harbor processes when selecting concurrency. Use an explicit model ID such as `-m openai/gpt-6-luna` to select only
+GPT-6 Luna; the substring `luna` can match multiple generations in the model table.
 
 The option stages content-addressed copies under `.layout-analyzer/<mode>/<hash>`
 and prints the resulting plain Harbor command with `--dry-run`. The adjacent
@@ -185,3 +185,11 @@ Fork CI validates the published `ghcr.io/vaadin` images by default. A fork that
 publishes its own stack should set the repository Actions variable
 `VAADINBENCH_IMAGE_OWNER` to that publisher's namespace; the digest and consistent
 stack checks still apply.
+
+## Luna 6 xhigh comparison on Vaadin 25.3
+
+The [2026-09-29 sequential Reports-strict comparison](layout-analyzer-luna6-results.md)
+completed with nine successful analyzer captures. Both arms timed out and scored
+0. Whole-page similarity improved slightly with the analyzer, but a mobile drawer
+interaction failed and token use increased. This pair establishes tool usability,
+not a development speed or overall quality improvement.
