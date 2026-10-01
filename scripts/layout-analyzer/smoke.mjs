@@ -6,7 +6,8 @@ import { chromium } from 'playwright';
 import { captureLayout } from '@vaadin/layout-analyzer-preview/playwright';
 import { main as captureWithAdapter } from './capture.mjs';
 
-const config = JSON.parse(await readFile(process.env.PLAYWRIGHT_MCP_CONFIG, 'utf8')).browser;
+const config = process.env.PLAYWRIGHT_MCP_CONFIG
+  ? JSON.parse(await readFile(process.env.PLAYWRIGHT_MCP_CONFIG, 'utf8')).browser : {};
 const browser = await chromium.launch({ ...config.launchOptions, headless: true });
 const out = process.argv[3] || '/logs/agent/layout-smoke';
 await mkdir(out, { recursive: true });

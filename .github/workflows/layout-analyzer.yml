@@ -65,12 +65,28 @@ jobs:
             -v "$PWD/layout-smoke:/logs/agent" \
             layout-analyzer-smoke bash -lc '
               set -euo pipefail
+              start_app() {
+                setsid mvn -o spring-boot:run > /logs/agent/application.log 2>&1 &
+                app_pid=$!
+                for attempt in $(seq 1 180); do
+                  if curl -fsS http://localhost:8080/employees >/dev/null; then return; fi
+                  if ! kill -0 "$app_pid" 2>/dev/null; then break; fi
+                  sleep 2
+                done
+                cat /logs/agent/application.log
+                return 1
+              }
+              stop_app() {
+                kill -- -"$app_pid" 2>/dev/null || true
+                wait "$app_pid" 2>/dev/null || true
+              }
+              trap stop_app EXIT
               bash /reference/solve.sh
-              app-start
+              start_app
               node /opt/vaadinbench/layout-analyzer/smoke.mjs
               layout-check http://localhost:8080/employees --ready vaadin-grid --out /logs/agent/adapter
-              app-stop
-              JAVA_TOOL_OPTIONS=-Dvaadin.copilot.enable=false app-start
+              stop_app
+              JAVA_TOOL_OPTIONS=-Dvaadin.copilot.enable=false start_app
               if layout-check http://localhost:8080/employees --ready vaadin-grid --timeout 2000 --out /logs/agent/disabled; then
                 echo "Capture unexpectedly succeeded without Copilot" >&2
                 exit 1

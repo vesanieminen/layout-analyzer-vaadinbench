@@ -94,7 +94,7 @@ def stage_tasks(tasks, mode, root=ROOT):
                 instruction.write_text(
                     "Layout experiment: run `layout-check` after the first working render, "
                     "before manual geometry tuning. Capture the task's desktop and mobile "
-                    "states, then use the report alongside screenshots and `ui-check`. "
+                    "states, then use the report alongside screenshots and browser interaction checks. "
                     "The command guide follows the task below.\n\n"
                     + instruction.read_text() + "\n\n" + (TOOLS / "instructions.md").read_text()
                 )

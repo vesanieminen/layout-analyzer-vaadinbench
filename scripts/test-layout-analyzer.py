@@ -87,6 +87,8 @@ class LayoutExperimentTests(unittest.TestCase):
             self.assertFalse((staged / name / 'environment/node_modules').exists())
             self.assertEqual((task / 'environment/Dockerfile').read_text(), 'FROM example\n')
             self.assertIn('layout-check', (staged / name / 'instruction.md').read_text())
+            self.assertNotIn('`ui-check`', (staged / name / 'instruction.md').read_text())
+            self.assertNotIn('`app-start`', (staged / name / 'instruction.md').read_text())
             self.assertIn('copilot.enable=true', (staged / name / 'environment/Dockerfile').read_text())
             manifest = json.loads((staged.parent / 'manifest.json').read_text())
             archive = staged / name / 'environment/layout-analyzer/preview.tgz'

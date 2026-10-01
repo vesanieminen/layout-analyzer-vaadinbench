@@ -5,7 +5,13 @@ preview. It measures rendered Vaadin components using Copilot's internal Inspect
 API and returns geometry, heuristic findings and structural peer comparisons.
 It needs development mode, Copilot, Node >=22 and Chromium. It neither reads the
 reference screenshot nor knows the intended design, so it supplements screenshots
-and `ui-check`; it must not become the grading oracle.
+and browser interaction checks; it must not become the grading oracle.
+
+Upstream alignment (2026-10-01): the visual tasks now use the upstream
+Vaadin 25.3.0 / Spring Boot 4.1.1 starter and standard Playwright CLI.
+Agents have no `ui-check`, grading contracts, or custom `app-start` helpers.
+The recorded Luna pilot predates these task and grading changes; repeat both
+arms on the current tasks before comparing results.
 
 ## Run a controlled comparison
 
@@ -53,7 +59,9 @@ the view can miss the part of development where geometry feedback is useful.
 ## Use the report during implementation
 
 ```sh
-app-start
+# In a separate terminal, start the application:
+mvn spring-boot:run
+# Once the view is ready, capture it from another terminal:
 layout-check http://localhost:8080/employees \
   --ready '[data-testid="employee-grid"]' --state initial \
   --width 1440 --height 1024

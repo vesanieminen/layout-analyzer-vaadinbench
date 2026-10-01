@@ -9,7 +9,7 @@
 # The image below is pulled from GHCR, named by the digest the base-image
 # workflow writes here. Why a digest and not the version tag, and how to point it
 # at an image you built yourself: README, "Adding a task".
-ARG BASE_IMAGE=ghcr.io/vaadin/vaadinbench-agents@sha256:4ddbcb9ffddfaf035a2a1a44b3754f77463716e98e11e60070e5cfd86032e771
+ARG BASE_IMAGE=ghcr.io/vaadin/vaadinbench-agents@sha256:7139a6e7cc81fde75904ec4f76f9af864bb916ae530058b8ace7a617fc4042d7
 FROM ${BASE_IMAGE}
 
 WORKDIR /app

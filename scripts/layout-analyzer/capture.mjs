@@ -13,7 +13,7 @@ const help = `Usage: layout-check URL --ready CSS [--prepare state.mjs] [--state
 Captures the current state after prepare(page) and a visible readiness selector.
 Prints Markdown; saves JSON, screenshot, and metadata under /logs/agent/layout/.
 VB_LAYOUT_MODE=geometry omits relationships; full is the default.
-Uses the task's PLAYWRIGHT_MCP_CONFIG and its preinstalled Chromium.
+Uses preinstalled Chromium; optionally honors PLAYWRIGHT_MCP_CONFIG.
 `;
 
 function positive(value, name, minimum = 1) {
@@ -41,8 +41,7 @@ export async function main(args = process.argv.slice(2)) {
   const mode = process.env.VB_LAYOUT_MODE || 'full';
   if (!['geometry', 'full'].includes(mode)) throw new Error(`Invalid VB_LAYOUT_MODE: ${mode}`);
   const configPath = process.env.PLAYWRIGHT_MCP_CONFIG;
-  if (!configPath) throw new Error('PLAYWRIGHT_MCP_CONFIG must point to the task browser config');
-  const config = JSON.parse(await readFile(configPath, 'utf8')).browser;
+  const config = configPath ? JSON.parse(await readFile(configPath, 'utf8')).browser : {};
   const prepareSource = values.prepare ? await readFile(resolve(values.prepare), 'utf8') : null;
   const started = performance.now();
   const base = '/logs/agent/layout';

@@ -1,11 +1,11 @@
 ### Rendered layout feedback (preview experiment)
 
 Copilot is enabled in this development environment. Once the view first renders,
-run `layout-check` before manual geometry tuning, alongside screenshots and `ui-check`, to inspect
+run `layout-check` before manual geometry tuning, alongside screenshots and browser interaction checks, to inspect
 geometry, clipping, spacing, and repeated structures. Fix only observations that
 conflict with the requested design. A warning count is not a quality score.
 
-Start the app with `app-start`, then capture the task route with a CSS selector
+Start the app with `mvn spring-boot:run`, then capture the task route with a CSS selector
 that proves your view's data is ready, for example:
 
 ```sh
