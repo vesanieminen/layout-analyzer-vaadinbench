@@ -85,6 +85,7 @@ def stage_tasks(tasks, mode, root=ROOT):
                         "COPY layout-analyzer /opt/vaadinbench/layout-analyzer\n"
                         "RUN cd /opt/vaadinbench/layout-analyzer "
                         "&& PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm ci --ignore-scripts --no-audit --no-fund "
+                        "&& npx playwright install chromium "
                         "&& ln -s /opt/vaadinbench/layout-analyzer/capture.mjs /usr/local/bin/layout-check "
                         "&& layout-check --help\n"
                         f"ENV VB_LAYOUT_MODE={mode}\n"

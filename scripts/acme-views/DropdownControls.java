@@ -45,7 +45,7 @@ public final class DropdownControls {
       page.evaluate("document.body.insertAdjacentHTML('beforeend','<div role=option>Unrelated option</div>')");
       assertThrows(AssertionError.class, () -> AcmeChecks.exerciseDropdowns(
           page, page.getByTestId("date"), page.getByTestId("select")));
-      System.out.println("Dropdowns: delayed calendar cleanup and slotted/overlay options accepted for all three controls; unopened/empty dropdowns rejected despite unrelated options");
+      System.out.println("Dropdowns: delayed calendar cleanup, dropdown opening, and slotted/overlay options accepted for all three controls; unopened/empty dropdowns rejected despite unrelated options");
     }
   }
 
@@ -66,6 +66,12 @@ public final class DropdownControls {
         document.querySelector('[data-testid=select]').onclick=()=>{
           window.premature=calendar.hasAttribute('closing') || calendar.hasAttribute('opened');
           overlay.setAttribute('opened','');
+          overlay.setAttribute('opening','');
+          overlay.setAttribute('aria-hidden','true');
+          setTimeout(()=>{
+            overlay.removeAttribute('opening');
+            if (!window.premature) overlay.removeAttribute('aria-hidden');
+          },200);
           if (window.premature) overlay.setAttribute('aria-hidden','true');
         };
         document.onkeydown=e=>{

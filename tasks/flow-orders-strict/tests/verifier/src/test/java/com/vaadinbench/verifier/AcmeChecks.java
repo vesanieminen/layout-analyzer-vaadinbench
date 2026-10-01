@@ -109,6 +109,9 @@ final class AcmeChecks {
     String overlays = "vaadin-select-overlay,vaadin-combo-box-overlay,vaadin-multi-select-combo-box-overlay";
     Locator opened = page.locator(":is(" + overlays + ")[opened]");
     assertThat(opened).isVisible();
+    // A painted popover can still be opening while Vaadin assigns its slots.
+    // Wait for that transition before querying accessibility roles in the list.
+    assertThat(opened).not().hasAttribute("opening", "");
     // Current Vaadin slots light-DOM options into the overlay; older versions
     // render them beneath it. Scope to this control in either arrangement so
     // hidden options left by the calendar cannot become the first match.

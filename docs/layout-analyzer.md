@@ -43,8 +43,10 @@ and prints the resulting plain Harbor command with `--dry-run`. The adjacent
 `manifest.json` records SHA-256s of the tasks, helper code and archive. Only the
 agent Dockerfile and its instruction change; the original task files and all
 verifier files stay intact. npm dependencies are locked and installed during the
-image build. Captures use the task's existing Chromium and browser settings,
-without a second browser download or runtime package installation. Reports live
+image build. The image build installs the Chromium revision required by the adapter’s pinned
+Playwright version. The upstream CLI can use a different browser revision;
+captures must not depend on that revision being compatible. No runtime package
+installation or network access is needed. Reports live
 under `/logs/agent/layout`, outside the submitted `/app`.
 
 The supported tasks are the employee-list, payroll, orders and reports pairs.
