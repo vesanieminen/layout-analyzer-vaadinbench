@@ -61,3 +61,18 @@ The existing visual, component and interaction categories passed in all five
 cases, demonstrating why the additional layout checks are needed.
 [Recorded category results](validation.json). These Docker controls validate the
 grader; CI additionally checks artifact transfer through Harbor's nop/oracle agents.
+
+## Before repair
+
+Unmodified screenshots from the untouched (`nop`) starting application used in
+the local calibration above. Desktop: 1440×1024 CSS pixels; mobile: 390×844;
+both at DPR 2. The verifier disables Copilot overlays for clean captures. The
+mobile capture is taken after scrolling the search control into view, before
+any filtering or source changes.
+
+The desktop account footer is outside the viewport and the date controls overlap
+Regions. On mobile, the fixed-width filters extend beyond the screen.
+
+![Unrepaired desktop Reports view](screenshots/before-desktop.png)
+
+<img src="screenshots/before-mobile.png" alt="Unrepaired mobile Reports view with overflowing filters" width="390">
