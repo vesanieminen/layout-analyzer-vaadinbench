@@ -1,0 +1,26 @@
+{
+  "url": "http://localhost:8080/reports",
+  "state": "initial",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "mode": "full",
+  "ready": "[data-testid=\"report-cards\"] .report-card",
+  "prepareSource": "export async function prepare(page) {\n  const closeButton = page.getByRole('button', { name: 'Close' });\n  if (await closeButton.count()) {\n    await closeButton.first().click().catch(() => {});\n  }\n  await page.locator('[data-testid=\"report-cards\"] .report-card').first().waitFor({ state: 'visible' });\n}\n",
+  "capturedAt": "2026-10-01T22:01:17.073Z",
+  "status": "ok",
+  "copilotAvailable": true,
+  "coverage": {
+    "sourceReferences": 0,
+    "visibleComponents": 107,
+    "geometryStable": true,
+    "fontsReady": true
+  },
+  "readyElementInTree": true,
+  "coverageWarnings": [],
+  "reportChars": 13214,
+  "analyzerVersion": "0.1.1",
+  "totalDurationMs": 12634,
+  "reportTruncated": false
+}
