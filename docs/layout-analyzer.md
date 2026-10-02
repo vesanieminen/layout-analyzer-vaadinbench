@@ -13,6 +13,9 @@ Agents have no `ui-check`, grading contracts, or custom `app-start` helpers.
 The recorded Luna pilot predates these task and grading changes; repeat both
 arms on the current tasks before comparing results.
 
+The dedicated [`flow-reports-layout-repair` task](layout-repair/README.md) starts
+from an implemented view with controlled CSS defects, for a focused repair comparison.
+
 ## Run a controlled comparison
 
 ```sh
@@ -25,15 +28,16 @@ for mode in control geometry full; do
     -k 1 -n 1 --layout-analyzer "$mode" -- --ak reasoning_effort=xhigh
 done
 
-# Once the pilot works, cover all eight visual tasks (strict and lenient).
-uv run vaadin-bench.py -c vanilla -m openai/gpt-6-luna -k 1 -n 2 \
+# Once the pilot works, cover the supported visual and repair tasks.
+uv run vaadin-bench.py -c vanilla -m openai/gpt-6-luna -k 1 -n 1 \
   --layout-analyzer full -- --ak reasoning_effort=xhigh
 ```
 
 `control` enables Copilot without installing or mentioning the analyzer.
 `geometry` supplies the report without relationships. `full` includes
 relationships. They all keep the same ordinary browser tools, task requirements,
-grader and resource limits. Normal runs without the flag keep Copilot disabled.
+grader and resource limits. Normal implementation tasks without the flag keep Copilot disabled. The layout-repair
+task enables Copilot in its baseline as well.
 The experiment defaults to one concurrent trial and accepts at most three.
 Account for other Harbor processes when selecting concurrency. Use an explicit model ID such as `-m openai/gpt-6-luna` to select only
 GPT-6 Luna; the substring `luna` can match multiple generations in the model table.

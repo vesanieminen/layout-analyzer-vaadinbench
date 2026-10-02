@@ -323,6 +323,7 @@ protocol through which the agent searches that documentation.
 | `flow-orders-strict` | Hard | — | Generated starter and screenshot reference |
 | `flow-orders-lenient` | Hard | — | Generated starter and screenshot reference |
 | `flow-reports-strict` | Hard | — | Generated starter and screenshot reference |
+| `flow-reports-layout-repair` | Medium | `/reports` | Working Reports view with seeded layout regressions |
 | `flow-reports-lenient` | Hard | — | Generated starter and screenshot reference |
 | `flow-polymer-to-lit` | Hard | 180 min | [Existing add-on at a pinned commit](https://github.com/samuliwritescode/infinite-grid) |
 
