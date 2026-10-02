@@ -14,6 +14,7 @@ SUPPORTED = tuple(
     for view in ("employee-list", "orders", "payroll", "reports")
     for profile in ("strict", "lenient")
 )
+SUPPORTED += ("flow-reports-layout-repair",)
 MODES = ("control", "geometry", "full")
 
 
@@ -38,7 +39,7 @@ def stage_tasks(tasks, mode, root=ROOT):
         raise ValueError(f"Unknown layout analyzer mode: {mode}")
     unsupported = sorted(set(tasks) - set(SUPPORTED))
     if unsupported:
-        raise ValueError("Layout experiments support the eight visual tasks; unsupported: "
+        raise ValueError("Layout experiments support the visual and layout-repair tasks; unsupported: "
                          + ", ".join(unsupported))
     inputs = {}
     for name in sorted(tasks):
