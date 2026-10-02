@@ -1,0 +1,9 @@
+{
+  "name": "vaadinbench-layout-analyzer",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@vaadin/layout-analyzer-preview": "file:preview.tgz",
+    "playwright": "1.60.0"
+  }
+}

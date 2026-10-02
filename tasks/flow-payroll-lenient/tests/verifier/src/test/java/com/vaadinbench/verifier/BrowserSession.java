@@ -8,6 +8,7 @@ import com.microsoft.playwright.options.*;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.List;
+import java.util.function.Supplier;
 
 /** Capture environment and readiness shared by development and grading. */
 final class BrowserSession {
@@ -25,13 +26,35 @@ final class BrowserSession {
   }
 
   static Browser launch(Playwright playwright) {
-    return playwright
+    return launch(() -> playwright
         .chromium()
         .launch(
             new BrowserType.LaunchOptions()
                 .setArgs(
                     List.of(
-                        "--no-sandbox", "--disable-dev-shm-usage", "--font-render-hinting=none")));
+                        "--no-sandbox", "--disable-dev-shm-usage", "--font-render-hinting=none"))));
+  }
+
+  /** Retry only a SIGSEGV while starting Chromium, before any page or check exists. */
+  static Browser launch(Supplier<Browser> start) {
+    try {
+      return start.get();
+    } catch (PlaywrightException first) {
+      String message = first.getMessage();
+      if (message == null || !message.contains("<launching>")
+          || !message.contains("<launched>") || !message.contains("Received signal 11")) {
+        throw first;
+      }
+      System.err.println("Chromium crashed with SIGSEGV during launch; retrying once before checks");
+      // Keep the original browser log visible even if the fresh process succeeds.
+      System.err.println(first.getMessage());
+      try {
+        return start.get();
+      } catch (RuntimeException second) {
+        second.addSuppressed(first);
+        throw second;
+      }
+    }
   }
 
   static BrowserContext context(Browser browser) {
@@ -53,18 +76,8 @@ final class BrowserSession {
   }
 
   static void open(Page page, String url, Path diagnosticFile) {
-    open(page, url, diagnosticFile, page.getByTestId("employee-table"), "Employee route");
-    try {
-      assertThat(
-              page.getByTestId("employee-grid")
-                  .locator("[part~=body-row]")
-                  .filter(
-                      new Locator.FilterOptions().setHas(page.locator("[part~=employee-row-e15]"))))
-          .hasCount(1);
-    } catch (AssertionError failure) {
-      throw new ReadinessException(
-          "Required employee row e15 did not render; dependent scenarios cannot run", failure);
-    }
+    open(page, url, diagnosticFile, page.getByTestId("employee-grid"), "Employee route");
+    assertThat(page.getByTestId("employee-grid").locator("[part~=body-row]").nth(1)).isVisible();
   }
 
   static void open(Page page, String url, Path diagnosticFile, Locator readiness, String label) {

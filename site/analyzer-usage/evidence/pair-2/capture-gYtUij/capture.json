@@ -1,0 +1,26 @@
+{
+  "url": "http://localhost:8080/reports",
+  "state": "initial-mobile",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "mode": "full",
+  "ready": "[data-testid=\"report-cards\"] .report-card[data-report-id=\"r11\"]",
+  "prepareSource": null,
+  "capturedAt": "2026-10-01T19:59:14.018Z",
+  "status": "ok",
+  "copilotAvailable": true,
+  "coverage": {
+    "sourceReferences": 0,
+    "visibleComponents": 100,
+    "geometryStable": true,
+    "fontsReady": true
+  },
+  "readyElementInTree": true,
+  "coverageWarnings": [],
+  "reportChars": 11791,
+  "analyzerVersion": "0.1.1",
+  "totalDurationMs": 12727,
+  "reportTruncated": false
+}

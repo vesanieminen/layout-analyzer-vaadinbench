@@ -72,6 +72,12 @@ jobs:
                   fi
                   sel=$(printf '%s\n' $sel | sort -u | xargs)
                   why="changed tasks and migration inputs"
+                  # Shared view tooling must qualify all eight agent images.
+                  if echo "$changed" | grep -qE '^scripts/test-view-agent-(boundary\.py|tools\.sh)$'; then
+                    sel=$(printf '%s\n' "$sel" $(ls -d tasks/flow-{employee-list,payroll,orders,reports}-{strict,lenient}) \
+                      | tr ' ' '\n' | sed '/^$/d' | sort -u | xargs)
+                    why="changed tasks and shared view tooling"
+                  fi
                   # Browser helpers are outside task Docker contexts, but changes
                   # to them must qualify both profiles, including oracle controls.
                   if echo "$changed" | grep -qE '^scripts/(employee-list/|[^/]*employee-list[^/]*$)'; then
@@ -80,7 +86,7 @@ jobs:
                     why="changed tasks and employee-list helpers"
                   fi
                   # ACME helpers qualify the six additional views. Employee helpers
-                  # also qualify them because their browser tools are shared.
+                  # also qualify them because their verifier helpers are shared.
                   if echo "$changed" | grep -qE '^scripts/(employee-list/|acme-views/|(test-acme-views\.sh|test-acme-ui-check\.sh|run-acme-browser-controls\.sh|sync-acme-views\.py|regrade-acme-views\.py)$)'; then
                     sel=$(printf '%s\n' "$sel" $(ls -d tasks/flow-{payroll,orders,reports}-{strict,lenient}) \
                       | tr ' ' '\n' | sed '/^$/d' | sort -u | xargs)
@@ -132,8 +138,8 @@ jobs:
             echo "$stack=$selected" >> "$GITHUB_OUTPUT"
           done
 
-  # Separate reusable-workflow calls let each stack start grading immediately
-  # after its own preparation, without waiting for the other stack.
+  # Each stack caps its matrix at three. Run the stacks sequentially so a full
+  # sweep also stays within three concurrent Harbor trials overall.
   modern:
     name: Modern
     needs: select
@@ -145,8 +151,8 @@ jobs:
 
   migration:
     name: Migration
-    needs: select
-    if: needs.select.outputs.migration != '{"include":[]}'
+    needs: [select, modern]
+    if: ${{ !cancelled() && needs.select.result == 'success' && needs.select.outputs.migration != '{"include":[]}' }}
     uses: ./.github/workflows/control-stack.yml
     with:
       stack: migration

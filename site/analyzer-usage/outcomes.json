@@ -1,0 +1,74 @@
+[
+  {
+    "pair": 1,
+    "mode": "control",
+    "agentSeconds": 2647.57,
+    "visualAggregate": 0.7986328143511617,
+    "reward": 0.0,
+    "uncachedInputTokens": 259957,
+    "outputTokens": 85734
+  },
+  {
+    "pair": 1,
+    "mode": "full",
+    "agentSeconds": 2003.48,
+    "visualAggregate": 0.8278255605373909,
+    "reward": 0.0,
+    "uncachedInputTokens": 437216,
+    "outputTokens": 84357
+  },
+  {
+    "pair": 2,
+    "mode": "control",
+    "agentSeconds": 2205.81,
+    "visualAggregate": 0.8359350890422091,
+    "reward": 0.0,
+    "uncachedInputTokens": 275340,
+    "outputTokens": 86475
+  },
+  {
+    "pair": 2,
+    "mode": "full",
+    "agentSeconds": 2372.79,
+    "visualAggregate": 0.80863391200344,
+    "reward": 0.0,
+    "uncachedInputTokens": 433427,
+    "outputTokens": 81976
+  },
+  {
+    "pair": 3,
+    "mode": "control",
+    "agentSeconds": 1929.21,
+    "visualAggregate": 0.845742880384593,
+    "reward": 0.0,
+    "uncachedInputTokens": 257379,
+    "outputTokens": 80969
+  },
+  {
+    "pair": 3,
+    "mode": "full",
+    "agentSeconds": 2592.35,
+    "visualAggregate": 0.8231049643401225,
+    "reward": 0.0,
+    "uncachedInputTokens": 382821,
+    "outputTokens": 67227
+  },
+  {
+    "pair": 4,
+    "mode": "control",
+    "agentSeconds": 3562.34,
+    "visualAggregate": 0.7221233858872047,
+    "reward": 0.0,
+    "uncachedInputTokens": 324803,
+    "outputTokens": 87524
+  },
+  {
+    "pair": 4,
+    "mode": "full",
+    "agentSeconds": 1974.69,
+    "visualAggregate": 0.7590981836598696,
+    "reward": 0.0,
+    "uncachedInputTokens": 292257,
+    "outputTokens": 69236
+  }
+]

@@ -1,0 +1,210 @@
+{
+  "recordedAt": "2026-09-23",
+  "notes": [
+    "One attempt per task/mode on a shared host; not a causal comparison or a stable success-rate estimate.",
+    "All trials enable Vaadin Copilot. Zero captures means the agent did not use the analyzer, even if it was installed.",
+    "Original appended guidance was replaced with an explicit first-render reminder after the agents ignored the tool.",
+    "Input tokens include cache hits summed across model requests; they are not unique context tokens.",
+    "Cancelled trials belong to the replaced queue and are excluded from outcome comparisons."
+  ],
+  "trials": [
+    {
+      "job": "preview-pilot-layout-full-vanilla-codex-20260923-194504",
+      "trial": "flow-employee-list-strict__xvVFqYS",
+      "task": "vaadin/flow-employee-list-strict",
+      "taskChecksum": "d0ffebde403a53456abb836e52234f907291aa3848ab65bc73cc2872892d99b3",
+      "mode": "full",
+      "model": "openai/gpt-5.6-luna",
+      "effort": "xhigh",
+      "finished": "2026-09-23T20:48:51.301963Z",
+      "error": "AgentTimeoutError",
+      "reward": 0.0,
+      "agentSeconds": 3605.0,
+      "inputTokensIncludingCache": 36514573,
+      "cachedTokens": 35985408,
+      "outputTokens": 109521,
+      "captures": 0,
+      "successfulCaptures": 0,
+      "partialCaptures": 0,
+      "capturesWithoutCoverageCheck": 0,
+      "captureTotalMs": 0,
+      "reportChars": 0,
+      "captureErrors": [],
+      "browserTests": [
+        {
+          "class": "com.vaadinbench.verifier.EmployeeListBrowserVerifierTest",
+          "name": "appropriateVaadinComponentsAreUsed",
+          "status": "passed",
+          "seconds": 7.4
+        },
+        {
+          "class": "com.vaadinbench.verifier.EmployeeListBrowserVerifierTest",
+          "name": "bothReferenceScreenshots",
+          "status": "failure",
+          "seconds": 18.499
+        },
+        {
+          "class": "com.vaadinbench.verifier.EmployeeListBrowserVerifierTest",
+          "name": "shellFixtureAndRealControls",
+          "status": "passed",
+          "seconds": 3.603
+        },
+        {
+          "class": "com.vaadinbench.verifier.EmployeeListBrowserVerifierTest",
+          "name": "selectionCallbacksAndNoPersistence",
+          "status": "failure",
+          "seconds": 7.719
+        },
+        {
+          "class": "com.vaadinbench.verifier.EmployeeListBrowserVerifierTest",
+          "name": "tableScrollKeepsShellAndHeaderStill",
+          "status": "passed",
+          "seconds": 1.958
+        },
+        {
+          "class": "com.vaadinbench.verifier.EmployeeListBrowserVerifierTest",
+          "name": "breakpointsReflowLiveInBothDirections",
+          "status": "failure",
+          "seconds": 2.231
+        }
+      ],
+      "visualChecks": [
+        {
+          "state": "plain",
+          "region": "whole",
+          "ssim": 0.9288144304835054,
+          "minimum": 0.95,
+          "passed": false
+        },
+        {
+          "state": "plain",
+          "region": "sidebar",
+          "ssim": 0.9196336643208041,
+          "minimum": 0.95,
+          "passed": false
+        },
+        {
+          "state": "plain",
+          "region": "tabs",
+          "ssim": 0.942081759316765,
+          "minimum": 0.95,
+          "passed": false
+        },
+        {
+          "state": "plain",
+          "region": "summary",
+          "ssim": 0.9422685186058715,
+          "minimum": 0.95,
+          "passed": false
+        },
+        {
+          "state": "plain",
+          "region": "table",
+          "ssim": 0.9306781859654529,
+          "minimum": 0.95,
+          "passed": false
+        },
+        {
+          "state": "plain",
+          "region": "brand",
+          "ssim": 0.9999720107903303,
+          "minimum": 0.95,
+          "passed": true
+        },
+        {
+          "state": "open",
+          "region": "whole",
+          "ssim": 0.9140702591195036,
+          "minimum": 0.95,
+          "passed": false
+        },
+        {
+          "state": "open",
+          "region": "sidebar",
+          "ssim": 0.9196336913998528,
+          "minimum": 0.95,
+          "passed": false
+        },
+        {
+          "state": "open",
+          "region": "tabs",
+          "ssim": 0.942081759316765,
+          "minimum": 0.95,
+          "passed": false
+        },
+        {
+          "state": "open",
+          "region": "summary",
+          "ssim": 0.9422685186058715,
+          "minimum": 0.95,
+          "passed": false
+        },
+        {
+          "state": "open",
+          "region": "table",
+          "ssim": 0.8966452426860043,
+          "minimum": 0.95,
+          "passed": false
+        },
+        {
+          "state": "open",
+          "region": "panel-header",
+          "ssim": 0.8440139109102243,
+          "minimum": 0.95,
+          "passed": false
+        },
+        {
+          "state": "open",
+          "region": "panel-fields",
+          "ssim": 0.9385529926913749,
+          "minimum": 0.95,
+          "passed": false
+        },
+        {
+          "state": "open",
+          "region": "panel-role",
+          "ssim": 0.9192821184169265,
+          "minimum": 0.95,
+          "passed": false
+        },
+        {
+          "state": "open",
+          "region": "panel-footer",
+          "ssim": 0.8611231160112776,
+          "minimum": 0.95,
+          "passed": false
+        },
+        {
+          "state": "open",
+          "region": "brand",
+          "ssim": 0.9999727487927479,
+          "minimum": 0.95,
+          "passed": true
+        }
+      ],
+      "designFailures": [
+        "plain/whole: SSIM 0.9288144304835054 < 0.95",
+        "plain/sidebar: SSIM 0.9196336643208041 < 0.95",
+        "plain/tabs: SSIM 0.942081759316765 < 0.95",
+        "plain/summary: SSIM 0.9422685186058715 < 0.95",
+        "plain/table: SSIM 0.9306781859654529 < 0.95",
+        "open/whole: SSIM 0.9140702591195036 < 0.95",
+        "open/sidebar: SSIM 0.9196336913998528 < 0.95",
+        "open/tabs: SSIM 0.942081759316765 < 0.95",
+        "open/summary: SSIM 0.9422685186058715 < 0.95",
+        "open/table: SSIM 0.8966452426860043 < 0.95",
+        "open/panel-header: SSIM 0.8440139109102243 < 0.95",
+        "open/panel-fields: SSIM 0.9385529926913749 < 0.95",
+        "open/panel-role: SSIM 0.9192821184169265 < 0.95",
+        "open/panel-footer: SSIM 0.8611231160112776 < 0.95"
+      ],
+      "snapshotSha256": "e917cb15a452bf244cbed1bfe5d6cd4efaeb96783d67a22f8abe70103f752847",
+      "protocol": "original appended guidance",
+      "designAssertions": {
+        "total": 431,
+        "passed": 431,
+        "failed": 0
+      }
+    }
+  ]
+}

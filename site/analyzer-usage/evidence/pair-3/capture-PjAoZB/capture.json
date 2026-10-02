@@ -1,0 +1,26 @@
+{
+  "url": "http://localhost:8080/reports",
+  "state": "initial",
+  "viewport": {
+    "width": 1440,
+    "height": 1024
+  },
+  "mode": "full",
+  "ready": "[data-testid=\"report-cards\"] .report-card",
+  "prepareSource": "export async function prepare(page) {\n  await page.locator('[data-testid=\"report-cards\"] .report-card').first().waitFor({ state: 'visible' });\n  await page.waitForTimeout(500);\n  const quiet = page.getByRole('checkbox', { name: \"Don't show again\" });\n  if (await quiet.count() && !(await quiet.isChecked().catch(() => false))) {\n    await quiet.check().catch(() => {});\n  }\n  const close = page.getByRole('button', { name: 'Close' });\n  if (await close.count()) await close.first().click().catch(() => {});\n  await page.waitForTimeout(250);\n}\n",
+  "capturedAt": "2026-10-01T22:23:53.839Z",
+  "status": "ok",
+  "copilotAvailable": true,
+  "coverage": {
+    "sourceReferences": 0,
+    "visibleComponents": 124,
+    "geometryStable": true,
+    "fontsReady": true
+  },
+  "readyElementInTree": true,
+  "coverageWarnings": [],
+  "reportChars": 13448,
+  "analyzerVersion": "0.1.1",
+  "totalDurationMs": 14760,
+  "reportTruncated": false
+}

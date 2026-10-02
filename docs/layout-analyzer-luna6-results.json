@@ -1,0 +1,583 @@
+{
+  "sourceCommit": "d09a6aaaf9c9a297e6f5b35720c4fac8e82e2c7e",
+  "date": "2026-09-29",
+  "task": "flow-reports-strict",
+  "model": "openai/gpt-6-luna",
+  "reasoningEffort": "xhigh",
+  "condition": "vanilla",
+  "attemptsPerArm": 1,
+  "concurrency": 1,
+  "order": [
+    "control",
+    "full"
+  ],
+  "copilotEnabledInBothArms": true,
+  "uiCheckEnabledInBothArms": true,
+  "vaadinVersion": "25.3.0",
+  "analyzerVersion": "0.1.1",
+  "baseImage": "vb-full-ci-modern-base:20260929",
+  "agentsImage": "vb-full-ci-modern-agents:20260929",
+  "billingNote": "Codex subscription auth.json; Harbor cost figures are estimates, not verified account charges.",
+  "trials": [
+    {
+      "job": "luna6-visual-control-layout-control-vanilla-codex-20260929-133248",
+      "trial": "flow-reports-strict__9dTVbi8",
+      "task": "vaadin/flow-reports-strict",
+      "taskChecksum": "9f00b6ba1a164544b93f19fc9e507ceb41e4c0a480319f33868dd4f700aebaf5",
+      "mode": "control",
+      "manifest": "/tmp/vaadinbench-full-ci-20260929/.layout-analyzer/control/23d5f05a60b787e932e249ef8afe75ad4eea64e9a36d518629e6a1b2781c0b3c/manifest.json",
+      "model": "openai/gpt-6-luna",
+      "effort": "xhigh",
+      "finished": "2026-09-29T14:34:37.806892Z",
+      "error": "AgentTimeoutError",
+      "reward": 0.0,
+      "agentSeconds": 3604.58,
+      "inputTokensIncludingCache": 9528176,
+      "cachedTokens": 9219584,
+      "outputTokens": 77636,
+      "captures": 0,
+      "successfulCaptures": 0,
+      "partialCaptures": 0,
+      "capturesWithoutCoverageCheck": 0,
+      "captureTotalMs": 0,
+      "reportChars": 0,
+      "captureErrors": [],
+      "browserTests": [
+        {
+          "class": "com.vaadinbench.verifier.AcmeBrowserVerifierTest",
+          "name": "fixtureContentAndInitialState",
+          "status": "passed",
+          "seconds": 4.814
+        },
+        {
+          "class": "com.vaadinbench.verifier.AcmeBrowserVerifierTest",
+          "name": "measuredDesignAndRegionalScreenshots",
+          "status": "failure",
+          "seconds": 9.239
+        },
+        {
+          "class": "com.vaadinbench.verifier.AcmeBrowserVerifierTest",
+          "name": "interactionsUpdateRealContent",
+          "status": "passed",
+          "seconds": 2.953
+        },
+        {
+          "class": "com.vaadinbench.verifier.AcmeBrowserVerifierTest",
+          "name": "realVaadinComponentsAndAccessibleShell",
+          "status": "passed",
+          "seconds": 2.755
+        },
+        {
+          "class": "com.vaadinbench.verifier.AcmeBrowserVerifierTest",
+          "name": "contentScrollsWithoutMovingShell",
+          "status": "passed",
+          "seconds": 1.941
+        },
+        {
+          "class": "com.vaadinbench.verifier.AcmeBrowserVerifierTest",
+          "name": "responsiveLiveResizePreservesState",
+          "status": "passed",
+          "seconds": 3.525
+        },
+        {
+          "class": "com.vaadinbench.verifier.AcmeBrowserVerifierTest",
+          "name": "filterBoundariesAndReset",
+          "status": "passed",
+          "seconds": 3.408
+        }
+      ],
+      "visualChecks": [
+        {
+          "state": "plain",
+          "region": "whole",
+          "ssim": 0.9241315888405698,
+          "minimum": 0.95,
+          "passed": false
+        },
+        {
+          "state": "plain",
+          "region": "sidebar",
+          "ssim": 0.9063236118349054,
+          "minimum": 0.95,
+          "passed": false
+        },
+        {
+          "state": "plain",
+          "region": "header",
+          "ssim": 0.9846942831027409,
+          "minimum": 0.95,
+          "passed": true
+        },
+        {
+          "state": "plain",
+          "region": "summary",
+          "ssim": 0.886427651267924,
+          "minimum": 0.95,
+          "passed": false
+        },
+        {
+          "state": "plain",
+          "region": "filters",
+          "ssim": 0.8540613690580621,
+          "minimum": 0.95,
+          "passed": false
+        },
+        {
+          "state": "plain",
+          "region": "cards-top",
+          "ssim": 0.9228836534113487,
+          "minimum": 0.95,
+          "passed": false
+        },
+        {
+          "state": "plain",
+          "region": "cards-middle",
+          "ssim": 0.9395746483484791,
+          "minimum": 0.95,
+          "passed": false
+        },
+        {
+          "state": "plain",
+          "region": "cards-bottom",
+          "ssim": 0.9431577135153985,
+          "minimum": 0.95,
+          "passed": false
+        }
+      ],
+      "designFailures": [
+        "plain/whole: SSIM 0.9241315888405698 < 0.95",
+        "plain/sidebar: SSIM 0.9063236118349054 < 0.95",
+        "plain/summary: SSIM 0.886427651267924 < 0.95",
+        "plain/filters: SSIM 0.8540613690580621 < 0.95",
+        "plain/cards-top: SSIM 0.9228836534113487 < 0.95",
+        "plain/cards-middle: SSIM 0.9395746483484791 < 0.95",
+        "plain/cards-bottom: SSIM 0.9431577135153985 < 0.95"
+      ],
+      "harborEstimatedCostUsd": 0.16187304000000008,
+      "uncachedInputTokens": 308592,
+      "designChecks": {
+        "total": 224,
+        "passed": 224
+      },
+      "commandCounts": {
+        "completedShellCommands": 74,
+        "uiCheck": 6,
+        "layoutCheck": 0,
+        "playwright": 32
+      },
+      "captureMetadata": [],
+      "artifacts": "/tmp/luna6-visual-comparison-20260929/luna6-visual-control-layout-control-vanilla-codex-20260929-133248/flow-reports-strict__9dTVbi8"
+    },
+    {
+      "job": "luna6-visual-full-layout-full-vanilla-codex-20260929-143438",
+      "trial": "flow-reports-strict__RhE4JK9",
+      "task": "vaadin/flow-reports-strict",
+      "taskChecksum": "abbee47b444bc6cd2513a0f669820ace66795a2f7042f6fb9599ff709e9efed6",
+      "mode": "full",
+      "manifest": "/tmp/vaadinbench-full-ci-20260929/.layout-analyzer/full/7b9097b672846327994e853239fbe861c2f6a9ab0ed586859727022f04e71a6c/manifest.json",
+      "model": "openai/gpt-6-luna",
+      "effort": "xhigh",
+      "finished": "2026-09-29T15:36:49.856237Z",
+      "error": "AgentTimeoutError",
+      "reward": 0.0,
+      "agentSeconds": 3604.7,
+      "inputTokensIncludingCache": 20262364,
+      "cachedTokens": 19954048,
+      "outputTokens": 113100,
+      "captures": 9,
+      "successfulCaptures": 9,
+      "partialCaptures": 0,
+      "capturesWithoutCoverageCheck": 0,
+      "captureTotalMs": 119483,
+      "reportChars": 62751,
+      "captureErrors": [],
+      "browserTests": [
+        {
+          "class": "com.vaadinbench.verifier.AcmeBrowserVerifierTest",
+          "name": "fixtureContentAndInitialState",
+          "status": "passed",
+          "seconds": 5.385
+        },
+        {
+          "class": "com.vaadinbench.verifier.AcmeBrowserVerifierTest",
+          "name": "measuredDesignAndRegionalScreenshots",
+          "status": "failure",
+          "seconds": 9.409
+        },
+        {
+          "class": "com.vaadinbench.verifier.AcmeBrowserVerifierTest",
+          "name": "interactionsUpdateRealContent",
+          "status": "passed",
+          "seconds": 3.129
+        },
+        {
+          "class": "com.vaadinbench.verifier.AcmeBrowserVerifierTest",
+          "name": "realVaadinComponentsAndAccessibleShell",
+          "status": "passed",
+          "seconds": 3.073
+        },
+        {
+          "class": "com.vaadinbench.verifier.AcmeBrowserVerifierTest",
+          "name": "contentScrollsWithoutMovingShell",
+          "status": "passed",
+          "seconds": 2.125
+        },
+        {
+          "class": "com.vaadinbench.verifier.AcmeBrowserVerifierTest",
+          "name": "responsiveLiveResizePreservesState",
+          "status": "error",
+          "seconds": 17.567
+        },
+        {
+          "class": "com.vaadinbench.verifier.AcmeBrowserVerifierTest",
+          "name": "filterBoundariesAndReset",
+          "status": "passed",
+          "seconds": 3.788
+        }
+      ],
+      "visualChecks": [
+        {
+          "state": "plain",
+          "region": "whole",
+          "ssim": 0.9347157174466557,
+          "minimum": 0.95,
+          "passed": false
+        },
+        {
+          "state": "plain",
+          "region": "sidebar",
+          "ssim": 0.9436921769699398,
+          "minimum": 0.95,
+          "passed": false
+        },
+        {
+          "state": "plain",
+          "region": "header",
+          "ssim": 0.9945148015817213,
+          "minimum": 0.95,
+          "passed": true
+        },
+        {
+          "state": "plain",
+          "region": "summary",
+          "ssim": 0.9099239342312181,
+          "minimum": 0.95,
+          "passed": false
+        },
+        {
+          "state": "plain",
+          "region": "filters",
+          "ssim": 0.9061800141636873,
+          "minimum": 0.95,
+          "passed": false
+        },
+        {
+          "state": "plain",
+          "region": "cards-top",
+          "ssim": 0.9175900044298473,
+          "minimum": 0.95,
+          "passed": false
+        },
+        {
+          "state": "plain",
+          "region": "cards-middle",
+          "ssim": 0.9326842766727933,
+          "minimum": 0.95,
+          "passed": false
+        },
+        {
+          "state": "plain",
+          "region": "cards-bottom",
+          "ssim": 0.935118610259634,
+          "minimum": 0.95,
+          "passed": false
+        }
+      ],
+      "designFailures": [
+        "plain/whole: SSIM 0.9347157174466557 < 0.95",
+        "plain/sidebar: SSIM 0.9436921769699398 < 0.95",
+        "plain/summary: SSIM 0.9099239342312181 < 0.95",
+        "plain/filters: SSIM 0.9061800141636873 < 0.95",
+        "plain/cards-top: SSIM 0.9175900044298473 < 0.95",
+        "plain/cards-middle: SSIM 0.9326842766727933 < 0.95",
+        "plain/cards-bottom: SSIM 0.935118610259634 < 0.95"
+      ],
+      "harborEstimatedCostUsd": 0.28692208000000013,
+      "uncachedInputTokens": 308316,
+      "designChecks": {
+        "total": 224,
+        "passed": 224
+      },
+      "commandCounts": {
+        "completedShellCommands": 70,
+        "uiCheck": 2,
+        "layoutCheck": 9,
+        "playwright": 30
+      },
+      "captureMetadata": [
+        {
+          "url": "http://localhost:8080/reports",
+          "state": "initial",
+          "viewport": {
+            "width": 1440,
+            "height": 1024
+          },
+          "mode": "full",
+          "ready": "vaadin-card.report-card",
+          "prepareSource": null,
+          "capturedAt": "2026-09-29T14:41:21.057Z",
+          "status": "ok",
+          "browserVersion": "147.0.7727.15",
+          "copilotAvailable": true,
+          "finalUrl": "http://localhost:8080/reports",
+          "coverage": {
+            "sourceReferences": 0,
+            "visibleComponents": 57,
+            "geometryStable": true,
+            "fontsReady": true
+          },
+          "readyElementInTree": true,
+          "coverageWarnings": [],
+          "reportChars": 7366,
+          "analyzerVersion": "0.1.1",
+          "captureDurationMs": 10729,
+          "reportTruncated": false,
+          "totalDurationMs": 13805
+        },
+        {
+          "url": "http://localhost:8080/reports",
+          "state": "initial",
+          "viewport": {
+            "width": 375,
+            "height": 800
+          },
+          "mode": "full",
+          "ready": "vaadin-card.report-card",
+          "prepareSource": null,
+          "capturedAt": "2026-09-29T14:41:39.225Z",
+          "status": "ok",
+          "browserVersion": "147.0.7727.15",
+          "copilotAvailable": true,
+          "finalUrl": "http://localhost:8080/reports",
+          "coverage": {
+            "sourceReferences": 0,
+            "visibleComponents": 58,
+            "geometryStable": true,
+            "fontsReady": true
+          },
+          "readyElementInTree": true,
+          "coverageWarnings": [],
+          "reportChars": 7283,
+          "analyzerVersion": "0.1.1",
+          "captureDurationMs": 10729,
+          "reportTruncated": false,
+          "totalDurationMs": 12682
+        },
+        {
+          "url": "http://localhost:8080/reports",
+          "state": "initial",
+          "viewport": {
+            "width": 1440,
+            "height": 1024
+          },
+          "mode": "full",
+          "ready": "vaadin-card.report-card",
+          "prepareSource": null,
+          "capturedAt": "2026-09-29T15:09:12.645Z",
+          "status": "ok",
+          "browserVersion": "147.0.7727.15",
+          "copilotAvailable": true,
+          "finalUrl": "http://localhost:8080/reports",
+          "coverage": {
+            "sourceReferences": 0,
+            "visibleComponents": 57,
+            "geometryStable": true,
+            "fontsReady": true
+          },
+          "readyElementInTree": true,
+          "coverageWarnings": [],
+          "reportChars": 7132,
+          "analyzerVersion": "0.1.1",
+          "captureDurationMs": 10754,
+          "reportTruncated": false,
+          "totalDurationMs": 13752
+        },
+        {
+          "url": "http://localhost:8080/reports",
+          "state": "initial",
+          "viewport": {
+            "width": 1440,
+            "height": 1024
+          },
+          "mode": "full",
+          "ready": "vaadin-card.report-card",
+          "prepareSource": null,
+          "capturedAt": "2026-09-29T15:17:26.204Z",
+          "status": "ok",
+          "browserVersion": "147.0.7727.15",
+          "copilotAvailable": true,
+          "finalUrl": "http://localhost:8080/reports",
+          "coverage": {
+            "sourceReferences": 0,
+            "visibleComponents": 57,
+            "geometryStable": true,
+            "fontsReady": true
+          },
+          "readyElementInTree": true,
+          "coverageWarnings": [],
+          "reportChars": 7166,
+          "analyzerVersion": "0.1.1",
+          "captureDurationMs": 10721,
+          "reportTruncated": false,
+          "totalDurationMs": 13438
+        },
+        {
+          "url": "http://localhost:8080/reports",
+          "state": "initial",
+          "viewport": {
+            "width": 1440,
+            "height": 1024
+          },
+          "mode": "full",
+          "ready": "vaadin-card.report-card",
+          "prepareSource": null,
+          "capturedAt": "2026-09-29T15:20:37.345Z",
+          "status": "ok",
+          "browserVersion": "147.0.7727.15",
+          "copilotAvailable": true,
+          "finalUrl": "http://localhost:8080/reports",
+          "coverage": {
+            "sourceReferences": 0,
+            "visibleComponents": 57,
+            "geometryStable": true,
+            "fontsReady": true
+          },
+          "readyElementInTree": true,
+          "coverageWarnings": [],
+          "reportChars": 6887,
+          "analyzerVersion": "0.1.1",
+          "captureDurationMs": 10864,
+          "reportTruncated": false,
+          "totalDurationMs": 13638
+        },
+        {
+          "url": "http://localhost:8080/reports",
+          "state": "initial",
+          "viewport": {
+            "width": 375,
+            "height": 800
+          },
+          "mode": "full",
+          "ready": "vaadin-card.report-card",
+          "prepareSource": null,
+          "capturedAt": "2026-09-29T15:21:00.102Z",
+          "status": "ok",
+          "browserVersion": "147.0.7727.15",
+          "copilotAvailable": true,
+          "finalUrl": "http://localhost:8080/reports",
+          "coverage": {
+            "sourceReferences": 0,
+            "visibleComponents": 58,
+            "geometryStable": true,
+            "fontsReady": true
+          },
+          "readyElementInTree": true,
+          "coverageWarnings": [],
+          "reportChars": 6689,
+          "analyzerVersion": "0.1.1",
+          "captureDurationMs": 10719,
+          "reportTruncated": false,
+          "totalDurationMs": 12878
+        },
+        {
+          "url": "http://localhost:8080/reports",
+          "state": "initial",
+          "viewport": {
+            "width": 1440,
+            "height": 1024
+          },
+          "mode": "full",
+          "ready": "vaadin-card.report-card",
+          "prepareSource": null,
+          "capturedAt": "2026-09-29T15:25:50.267Z",
+          "status": "ok",
+          "browserVersion": "147.0.7727.15",
+          "copilotAvailable": true,
+          "finalUrl": "http://localhost:8080/reports",
+          "coverage": {
+            "sourceReferences": 0,
+            "visibleComponents": 57,
+            "geometryStable": true,
+            "fontsReady": true
+          },
+          "readyElementInTree": true,
+          "coverageWarnings": [],
+          "reportChars": 6887,
+          "analyzerVersion": "0.1.1",
+          "captureDurationMs": 10843,
+          "reportTruncated": false,
+          "totalDurationMs": 13401
+        },
+        {
+          "url": "http://localhost:8080/reports",
+          "state": "initial",
+          "viewport": {
+            "width": 375,
+            "height": 800
+          },
+          "mode": "full",
+          "ready": "vaadin-card.report-card",
+          "prepareSource": null,
+          "capturedAt": "2026-09-29T15:26:08.777Z",
+          "status": "ok",
+          "browserVersion": "147.0.7727.15",
+          "copilotAvailable": true,
+          "finalUrl": "http://localhost:8080/reports",
+          "coverage": {
+            "sourceReferences": 0,
+            "visibleComponents": 58,
+            "geometryStable": true,
+            "fontsReady": true
+          },
+          "readyElementInTree": true,
+          "coverageWarnings": [],
+          "reportChars": 6689,
+          "analyzerVersion": "0.1.1",
+          "captureDurationMs": 10665,
+          "reportTruncated": false,
+          "totalDurationMs": 12943
+        },
+        {
+          "url": "http://localhost:8080/reports",
+          "state": "drawer-open",
+          "viewport": {
+            "width": 375,
+            "height": 800
+          },
+          "mode": "full",
+          "ready": "vaadin-card.report-card",
+          "prepareSource": "export async function prepare(page) {\n  const menu = page.getByTestId('menu-toggle');\n  await menu.waitFor({ state: 'visible' });\n  await menu.click();\n  await page.waitForFunction(() =>\n    document.querySelector('[data-testid=\"menu-toggle\"]')?.getAttribute('aria-expanded') === 'true'\n  );\n}\n",
+          "capturedAt": "2026-09-29T15:26:41.702Z",
+          "status": "ok",
+          "browserVersion": "147.0.7727.15",
+          "copilotAvailable": true,
+          "finalUrl": "http://localhost:8080/reports",
+          "coverage": {
+            "sourceReferences": 0,
+            "visibleComponents": 58,
+            "geometryStable": true,
+            "fontsReady": true
+          },
+          "readyElementInTree": true,
+          "coverageWarnings": [],
+          "reportChars": 6652,
+          "analyzerVersion": "0.1.1",
+          "captureDurationMs": 10770,
+          "reportTruncated": false,
+          "totalDurationMs": 12946
+        }
+      ],
+      "artifacts": "/tmp/luna6-visual-comparison-20260929/luna6-visual-full-layout-full-vanilla-codex-20260929-143438/flow-reports-strict__RhE4JK9"
+    }
+  ]
+}
